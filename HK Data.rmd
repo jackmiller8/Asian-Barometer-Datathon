@@ -14,7 +14,7 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
+```{r }
 library(inspectdf)
 library(foreign)
 library(tidyverse)
@@ -23,6 +23,14 @@ library(tidyverse)
 ```{r}
 hkdata <- read.spss("data/Hong Kong v4.2.sav", to.data.frame=TRUE)
 japandata <- read.spss("data/Japan v4.2.sav", to.data.frame=TRUE)
+```
+
+```{r}
+hkdata <- hkdata %>% 
+  mutate(level3 = as.factor(level3),
+         se002 = as.factor(se002),
+         se003 = as.factor(se003),
+         se004 = as.factor(se004))
 ```
 
 ```{r}
@@ -41,7 +49,7 @@ data %>%
 ```
 
 ```{r}
-attributes(japandata)$variable.labels
+attributes(hkdata)$variable.labels
 ```
 
 ```{r}
@@ -55,7 +63,7 @@ ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q014))) +
 ```
 
 ```{r}
-ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q012))) +
+ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q008))) +
   geom_bar()
 ```
 
@@ -65,7 +73,30 @@ ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q008))) +
 ```
 
 ```{r}
+ggplot(data = hkdata, aes(x = se005b, fill = as.factor(q008))) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 45))
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = se004a, fill = as.factor(q008))) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45))
+```
+
+```{r}
 ggplot(data = hkdata, aes(x = as.factor(se003), fill = as.factor(q008))) +
   geom_bar()
 ```
 
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se005), fill = as.factor(q008))) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se005), fill = as.factor(q008))) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90))
+```
