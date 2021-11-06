@@ -24,4 +24,12 @@ library(tidyverse)
 data <- read.spss("Hong Kong v4.2.sav", to.data.frame=TRUE)
 ```
 
+```{r}
+data %>% 
+  inspect_types()
+```
+
+```{r}
+imp <- read.csv("imp_variables/D2-ABS1+2.csv")
+```
 
