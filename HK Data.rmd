@@ -21,15 +21,51 @@ library(tidyverse)
 ```
 
 ```{r}
-data <- read.spss("Hong Kong v4.2.sav", to.data.frame=TRUE)
+hkdata <- read.spss("data/Hong Kong v4.2.sav", to.data.frame=TRUE)
+japandata <- read.spss("data/Japan v4.2.sav", to.data.frame=TRUE)
 ```
 
 ```{r}
-data %>% 
+japandata %>% 
   inspect_types()
 ```
 
 ```{r}
 imp <- read.csv("imp_variables/D2-ABS1+2.csv")
+```
+
+```{r}
+data %>% 
+  group_by(as.factor(se002)) %>% 
+  ggplot(aes(x = se002, y = ))
+```
+
+```{r}
+attributes(japandata)$variable.labels
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q016))) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q014))) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q012))) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se002), fill = as.factor(q008))) +
+  geom_bar()
+```
+
+```{r}
+ggplot(data = hkdata, aes(x = as.factor(se003), fill = as.factor(q008))) +
+  geom_bar()
 ```
 
