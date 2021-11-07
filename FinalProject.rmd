@@ -69,7 +69,39 @@ hkwave1 <- hkwave1 %>%
     TRUE ~ 0
   ))) %>% 
   mutate(income = as.factor(se009))
-  
+```
+
+```{r}
+japanwave1 <- japanwave1 %>% 
+  drop_na(q016) %>% 
+  mutate(TV_Trust = as.factor(case_when(
+    q016 == "Quite a lot of trust" | q016 == "A great deal of trust" ~ 1,
+    q016 == "None at all" | q016 == "Not very much trust" ~ 0
+  ))) %>% 
+  drop_na(level3) %>% 
+  mutate(urban = as.factor(case_when(
+    level3 == "urban" ~ 1,
+    level3 == "rural" ~ 0
+  ))) %>% 
+  mutate(age = as.numeric(se003a)) %>% 
+  drop_na(se005b) %>% 
+  mutate(educated = as.factor(case_when(
+    se005b == "tertitary education" | se005b == "secondary education" ~ 1,
+    se005b == "primary education" | se005b == "illiterate" ~ 0
+  ))) %>% 
+  mutate(male = as.factor(case_when(
+    se002 == "male" ~ 1,
+    se002 == "female" ~ 0
+  ))) %>% 
+  mutate(married = as.factor(case_when(
+    se004a == "Yes" ~ 1,
+    TRUE ~ 0
+  ))) %>% 
+  mutate(trusting = as.factor(case_when(
+    q024 == "Most people can be trusted" ~ 1,
+    TRUE ~ 0
+  ))) %>% 
+  mutate(income = as.factor(se009))
 ```
 
 
@@ -100,8 +132,12 @@ ggplot(data = hkwave1, aes(x = q056, fill = q016)) + geom_bar() +
 ```
 
 ```{r}
-model1 <- glm(TV_Trust ~ educated + age + male + married + trusting + income, data = hkwave1, family = "binomial")
-tidy(model1)
+modelhkw1 <- glm(TV_Trust ~ educated + age + male + married + trusting + income, data = hkwave1, family = "binomial")
+tidy(modelhkw1)
 ```
 
+```{r}
+modeljw1 <- glm(TV_Trust ~ educated + age + male + married + trusting + income, data = japanwave1, family = "binomial")
+tidy(modeljw1)
+```
 
