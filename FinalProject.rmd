@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo  =  TRUE,
 #Loading Packages and Data
 
 ```{r packages}
+library(broom)
 library(inspectdf)
 library(foreign)
 library(tidyverse)
@@ -37,6 +38,39 @@ hkwave1 %>% inspect_types()
 
 Most of our categorical data is already in factor form so we can continue.
 
+```{r}
+hkwave1 <- hkwave1 %>% 
+  drop_na(q016) %>% 
+  mutate(TV_Trust = as.factor(case_when(
+    q016 == "QUITE A LOT OF TRUST" | q016 == "A GREAT DEAL OF TRUST" ~ 1,
+    q016 == "NONE AT ALL" | q016 == "NOT VERY MUCH TRUST" ~ 0
+  ))) %>% 
+  drop_na(level3) %>% 
+  mutate(urban = as.factor(case_when(
+    level3 == "urban" ~ 1,
+    level3 == "rural" ~ 0
+  ))) %>% 
+  mutate(age = as.numeric(se003a)) %>% 
+  drop_na(se005b) %>% 
+  mutate(educated = as.factor(case_when(
+    se005b == "tertiary education" | se005b == "secondary education" ~ 1,
+    se005b == "primary education" | se005b == "illiterate" ~ 0
+  ))) %>% 
+  mutate(male = as.factor(case_when(
+    se002 == "MALE" ~ 1,
+    se002 == "FEMALE" ~ 0
+  ))) %>% 
+  mutate(married = as.factor(case_when(
+    se004a == "Yes" ~ 1,
+    TRUE ~ 0
+  ))) %>% 
+  mutate(trusting = as.factor(case_when(
+    q024 == "MOST PEOPLE CAN BE TRUSTED" ~ 1,
+    TRUE ~ 0
+  ))) %>% 
+  mutate(income = as.factor(se009))
+  
+```
 
 
 # Exploratory Data Analysis
@@ -56,4 +90,18 @@ ggplot(data = hkwave1, aes(x = se017, fill = q016)) + geom_bar() +
        x = "Social Status") + 
   guides(fill=guide_legend(title="Trust in Television"))
 ```
+
+```{r}
+ggplot(data = hkwave1, aes(x = q056, fill = q016)) + geom_bar() +
+  labs(title = "Trust in Television", subtitle = "By Social Status", 
+       x = "Social Status") + 
+  guides(fill=guide_legend(title="Trust in Television")) + 
+  theme(axis.text.x = element_text(angle = 45))
+```
+
+```{r}
+model1 <- glm(TV_Trust ~ educated + age + male + married + trusting + income, data = hkwave1, family = "binomial")
+tidy(model1)
+```
+
 
